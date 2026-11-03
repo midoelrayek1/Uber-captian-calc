@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0b1120" />
+  <title>حاسبة أوبر السريعة - برمجة المهندس محمد مختار</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Cairo', sans-serif;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #0b1120;
+      color: #f8fafc;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
+
+  <!-- Simple Clean Header -->
+  <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl">🚕</span>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-white leading-tight">حاسبة يومية أوبر</h1>
+          <p class="text-[11px] font-bold text-emerald-400">برمجة المهندس محمد مختار • 01017714130</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btnOpenSettings" type="button" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition">
+          ⚙️ الأسعار
+        </button>
+        <button id="btnResetZero" type="button" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 text-xs font-bold border border-slate-700 transition">
+          تصفير
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Single-Column Mobile Container -->
+  <main class="max-w-md mx-auto px-4 pt-4 space-y-4">
+
+    <!-- CARD 1: FAST INPUTS (KM + TOTAL REVENUE + 4 WALLETS) -->
+    <section class="bg-slate-900 border border-slate-800 rounded-3xl p-4 space-y-4 shadow-lg">
+      <!-- Primary 2 Big Inputs: Kilometers & Total Revenue -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Kilometers Today -->
+        <div class="bg-slate-950 border-2 border-sky-500/40 focus-within:border-sky-400 rounded-2xl p-3 text-center transition">
+          <label for="autoKmDriven" class="block text-xs font-bold text-sky-300 mb-1">🛣️ مشيت كام كيلو؟</label>
+          <div class="relative flex items-center justify-center">
+            <input id="autoKmDriven" type="number" min="0" step="1" value="66"
+              class="w-full bg-transparent text-center text-2xl font-black text-white outline-none" />
+            <span class="text-xs font-bold text-slate-400 mr-1">كم</span>
+          </div>
+        </div>
+
+        <!-- Total Revenue Today -->
+        <div class="bg-slate-950 border-2 border-emerald-500/40 focus-within:border-emerald-400 rounded-2xl p-3 text-center transition">
+          <label for="inputTotalRevenueDirect" class="block text-xs font-bold text-emerald-300 mb-1">💰 إجمالي إيراد اليوم</label>
+          <div class="relative flex items-center justify-center">
+            <input id="inputTotalRevenueDirect" type="number" min="0" step="1" value="327"
+              class="w-full bg-transparent text-center text-2xl font-black text-white outline-none" />
+            <span class="text-xs font-bold text-slate-400 mr-1">ج.م</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compact 4 Wallets Split -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-400">الفلوس دي موجودة فين؟ (اختياري للتوزيع)</span>
+          <button id="btnLoadDemo" type="button" class="text-[11px] font-bold text-emerald-400 hover:underline">
+            مثال اليوم (327 ج)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- Cash -->
+          <div class="bg-slate-950/90 border border-slate-800 focus-within:border-emerald-500/60 rounded-2xl px-3 py-2 flex items-center justify-between">
+            <label for="inputCash" class="text-xs font-bold text-emerald-300">💵 كاش</label>
+            <input id="inputCash" type="number" min="0" step="1" value="147"
+              class="w-20 bg-transparent text-left text-base font-black text-white outline-none" />
+          </div>
+
+          <!-- Uber App -->
+          <div class="bg-slate-950/90 border border-slate-800 focus-within:border-sky-500/60 rounded-2xl px-3 py-2 flex items-center justify-between">
+            <label for="inputUberApp" class="text-xs font-bold text-sky-300">📱 أوبر</label>
+            <input id="inputUberApp" type="number" min="0" step="1" value="50"
+              class="w-20 bg-transparent text-left text-base font-black text-white outline-none" />
+          </div>
+
+          <!-- Vodafone Cash -->
+          <div class="bg-slate-950/90 border border-slate-800 focus-within:border-rose-500/60 rounded-2xl px-3 py-2 flex items-center justify-between">
+            <label for="inputVfCash" class="text-xs font-bold text-rose-300">🔴 فودافون</label>
+            <input id="inputVfCash" type="number" min="0" step="1" value="80"
+              class="w-20 bg-transparent text-left text-base font-black text-white outline-none" />
+          </div>
+
+          <!-- InstaPay -->
+          <div class="bg-slate-950/90 border border-slate-800 focus-within:border-purple-500/60 rounded-2xl px-3 py-2 flex items-center justify-between">
+            <label for="inputInstaPay" class="text-xs font-bold text-purple-300">⚡ إنستا باي</label>
+            <input id="inputInstaPay" type="number" min="0" step="1" value="50"
+              class="w-20 bg-transparent text-left text-base font-black text-white outline-none" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 2: INSTANT DAY SUMMARY (BIG HERO RESULT) -->
+    <section id="netHomeCard" class="bg-gradient-to-b from-emerald-950/90 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-5 text-center shadow-xl space-y-4">
+      <div>
+        <p class="text-xs font-extrabold text-emerald-300 mb-1">🏠 الصافي النهائي للبيت النهاردة</p>
+        <p id="summaryNetHome" class="text-4xl font-black text-emerald-400 tracking-tight">182 ج.م</p>
+        <p id="summaryNetStatus" class="text-xs text-slate-300 mt-1">بعد خصم الغاز والبنزين والصيانة والإهلاك</p>
+      </div>
+
+      <!-- Car Expenses 3 Simple Pills -->
+      <div class="pt-3 border-t border-slate-800/90">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2 px-1">
+          <span>إجمالي مصاريف العربية اليوم:</span>
+          <span id="summaryTotalExpenses" class="font-black text-amber-400 text-sm">145 ج.م</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2.5">
+            <p class="text-[11px] text-cyan-300 font-bold">🔵 الغاز</p>
+            <p id="pillNatGas" class="text-base font-black text-white mt-0.5">81 ج.م</p>
+          </div>
+          <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2.5">
+            <p class="text-[11px] text-orange-300 font-bold">⛽ البنزين</p>
+            <p id="pillPetrol" class="text-base font-black text-white mt-0.5">15 ج.م</p>
+          </div>
+          <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-2.5">
+            <p class="text-[11px] text-amber-300 font-bold">🔧 صيانة وإهلاك</p>
+            <p id="pillReserve" class="text-base font-black text-white mt-0.5">50 ج.م</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 3: SHORT, DIRECT ACTION SUMMARY (WHAT TO DO WITH EACH WALLET) -->
+    <section class="bg-slate-900 border border-slate-800 rounded-3xl p-4 space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-extrabold text-white">🎯 تعمل إيه بالفلوس اللي معاك؟</h2>
+        <span id="livePricesBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">
+          غاز 13.5 | بنزين 22.25
+        </span>
+      </div>
+
+      <div id="smartAdviceContainer" class="space-y-2"></div>
+    </section>
+
+    <!-- CARD 4: ONE-TAP SAVE & QUICK PIGGYBANK BAR -->
+    <section class="bg-slate-900 border border-slate-800 rounded-3xl p-4 space-y-3">
+      <div class="flex items-center justify-between gap-2">
+        <button id="btnSaveShift" type="button" class="flex-1 py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/15">
+          <span>💾</span> حفظ يومية النهاردة
+        </button>
+        <button id="btnToggleHistory" type="button" class="py-3 px-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition">
+          📒 الحصالة (<span id="savedCountBadge">0</span>)
+        </button>
+      </div>
+
+      <!-- Collapsible History & Piggybank (Hidden unless clicked) -->
+      <div id="historyDrawer" class="hidden pt-3 border-t border-slate-800 space-y-3">
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-slate-950 rounded-xl p-2 border border-amber-500/20">
+            <p class="text-[10px] text-amber-300 font-bold">حصالة الصيانة</p>
+            <p id="cumMaintBalance" class="text-sm font-black text-amber-400">0 ج.م</p>
+          </div>
+          <div class="bg-slate-950 rounded-xl p-2 border border-indigo-500/20">
+            <p class="text-[10px] text-indigo-300 font-bold">حصالة الإهلاك</p>
+            <p id="cumDeprBalance" class="text-sm font-black text-indigo-400">0 ج.م</p>
+          </div>
+          <div class="bg-slate-950 rounded-xl p-2 border border-emerald-500/20">
+            <p class="text-[10px] text-emerald-300 font-bold">مجموع صافي البيت</p>
+            <p id="cumNetHomeTotal" class="text-sm font-black text-emerald-400">0 ج.م</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-400">الأيام المحفوظة:</span>
+          <button id="btnClearHistory" type="button" class="text-[11px] text-rose-400 font-bold hover:underline">مسح السجل</button>
+        </div>
+        <div id="savedHistoryList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+      </div>
+    </section>
+
+    <!-- DEVELOPER SIGNATURE & CREDITS CARD -->
+    <footer class="bg-slate-900/90 border border-emerald-500/30 rounded-3xl p-4 text-center space-y-2.5 shadow-md">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-extrabold">
+        <span>👨‍💻</span> برمجة المهندس محمد مختار
+      </div>
+      <p class="text-xs text-slate-300 font-semibold">
+        صدقة جارية ومساعدة مجانية لجميع كباتن أوبر والنقل الذكي
+      </p>
+      <div class="flex items-center justify-center gap-2 pt-1">
+        <a href="tel:01017714130" class="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-black flex items-center gap-1.5 transition">
+          <span>📞</span> 01017714130
+        </a>
+        <button id="btnCopyPhone" type="button" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition">
+          📋 نسخ الرقم
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- MODAL FOR FUEL PRICES & CAR RATES (Only shown when clicking ⚙️ الأسعار) -->
+  <div id="settingsModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-black text-white">⚙️ أسعار الوقود ومعدلات العربية</h3>
+        <button id="btnCloseSettings" type="button" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 font-black text-sm">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="priceNatGas" class="block font-bold text-cyan-300 mb-1">🔵 سعر متر الغاز</label>
+            <input id="priceNatGas" type="number" min="0" step="0.25" value="13.5"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-black text-base outline-none" />
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="pricePetrol" class="block font-bold text-orange-300 mb-1">⛽ سعر لتر البنزين</label>
+            <input id="pricePetrol" type="number" min="0" step="0.25" value="22.25"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-black text-base outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="kmPerGasMeter" class="block font-bold text-slate-300 mb-1">متر الغاز يمشي كام كم؟</label>
+            <input id="kmPerGasMeter" type="number" min="1" step="0.5" value="11"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-1.5 px-3 text-white font-bold text-sm outline-none" />
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="petrolLitersPer100Km" class="block font-bold text-slate-300 mb-1">لتر بنزين لكل 100 كم</label>
+            <input id="petrolLitersPer100Km" type="number" min="0" step="0.1" value="1.0"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-1.5 px-3 text-white font-bold text-sm outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="rateMaintPerKm" class="block font-bold text-amber-300 mb-1">صيانة لكل كم (ج.م)</label>
+            <input id="rateMaintPerKm" type="number" min="0" step="0.05" value="0.45"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-1.5 px-3 text-white font-bold text-sm outline-none" />
+          </div>
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+            <label for="rateDeprPerKm" class="block font-bold text-indigo-300 mb-1">إهلاك لكل كم (ج.م)</label>
+            <input id="rateDeprPerKm" type="number" min="0" step="0.05" value="0.30"
+              class="w-full bg-slate-900 border border-slate-700 rounded-xl py-1.5 px-3 text-white font-bold text-sm outline-none" />
+          </div>
+        </div>
+      </div>
+
+      <button id="btnSaveSettings" type="button" class="w-full py-3 rounded-2xl bg-emerald-500 text-slate-950 font-black text-sm">
+        حفظ وإغلاق
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden elements preserved for state compatibility -->
+  <div class="hidden">
+    <span id="currentDateBadge"></span>
+    <span id="summaryTotalIncome"></span>
+    <span id="summaryKmBadge"></span>
+    <span id="summaryExpensePct"></span>
+    <input id="expNatGas" type="number" value="81" />
+    <input id="expPetrol" type="number" value="14.7" />
+    <input id="expMaint" type="number" value="29.7" />
+    <input id="expDepr" type="number" value="19.8" />
+    <input id="autoGasPerKm" type="number" value="1.22" />
+    <input id="autoMaintPct" type="number" value="10" />
+    <input id="autoDeprPct" type="number" value="10" />
+    <input id="toggleDeductFuelFromWallets" type="checkbox" checked />
+    <select id="selectPriorityRule"><option value="uber_first" selected>uber</option></select>
+    <span id="cumFuelTotal"></span>
+    <button id="tabBtnCalc" type="button"></button>
+    <button id="tabBtnPlan" type="button"></button>
+    <button id="tabBtnHistory" type="button"></button>
+    <button id="modeAutoBtn" type="button"></button>
+    <button id="modeDirectBtn" type="button"></button>
+    <button id="btnToggleAdvancedRates" type="button"></button>
+    <button id="btnGoToPlanTab" type="button"></button>
+    <div id="walletBreakdownGrid"></div>
+    <table><tbody id="detailedPlanTableBody"></tbody></table>
+    <div id="expenseBucketsCards"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastBox" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden bg-emerald-600 text-white px-4 py-2.5 rounded-xl shadow-xl font-bold text-xs border border-emerald-400">
+    تم الحفظ!
+  </div>
+
+  <script>
+    const STORAGE_KEY_HISTORY = 'uber_captain_egypt_history_v1';
+    const STORAGE_KEY_SETTINGS = 'uber_captain_egypt_rates_v2';
+    let savedShifts = [];
+
+    function loadSavedShifts() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_HISTORY);
+        if (raw) savedShifts = JSON.parse(raw);
+      } catch (e) {
+        savedShifts = [];
+      }
+    }
+
+    function persistShifts() {
+      try {
+        localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(savedShifts));
+      } catch (e) {}
+    }
+
+    function loadSavedRates() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
+        if (raw) {
+          const s = JSON.parse(raw);
+          if (s.priceNatGas !== undefined) document.getElementById('priceNatGas').value = s.priceNatGas;
+          if (s.pricePetrol !== undefined) document.getElementById('pricePetrol').value = s.pricePetrol;
+          if (s.kmPerGasMeter !== undefined) document.getElementById('kmPerGasMeter').value = s.kmPerGasMeter;
+          if (s.petrolLitersPer100Km !== undefined) document.getElementById('petrolLitersPer100Km').value = s.petrolLitersPer100Km;
+          if (s.rateMaintPerKm !== undefined) document.getElementById('rateMaintPerKm').value = s.rateMaintPerKm;
+          if (s.rateDeprPerKm !== undefined) document.getElementById('rateDeprPerKm').value = s.rateDeprPerKm;
+        }
+      } catch (e) {}
+    }
+
+    function persistRates() {
+      try {
+        const settings = {
+          priceNatGas: getNumVal('priceNatGas'),
+          pricePetrol: getNumVal('pricePetrol'),
+          kmPerGasMeter: getNumVal('kmPerGasMeter'),
+          petrolLitersPer100Km: getNumVal('petrolLitersPer100Km'),
+          rateMaintPerKm: getNumVal('rateMaintPerKm'),
+          rateDeprPerKm: getNumVal('rateDeprPerKm')
+        };
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settings));
+      } catch (e) {}
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2200);
+    }
+
+    function formatEGP(num) {
+      const rounded = Math.round(Number(num) || 0);
+      return rounded.toLocaleString('ar-EG') + ' ج.م';
+    }
+
+    function getNumVal(id) {
+      const el = document.getElementById(id);
+      if (!el) return 0;
+      const v = parseFloat(el.value);
+      return isNaN(v) || v < 0 ? 0 : v;
+    }
+
+    function computeAllocation() {
+      const cash = getNumVal('inputCash');
+      const uberApp = getNumVal('inputUberApp');
+      const vfCash = getNumVal('inputVfCash');
+      const instaPay = getNumVal('inputInstaPay');
+      const totalIncome = Math.round(cash + uberApp + vfCash + instaPay);
+
+      const km = getNumVal('autoKmDriven');
+      const priceNatGas = getNumVal('priceNatGas');
+      const pricePetrol = getNumVal('pricePetrol');
+      const kmPerGasMeter = Math.max(0.5, getNumVal('kmPerGasMeter'));
+      const petrolLitersPer100Km = getNumVal('petrolLitersPer100Km');
+      const rateMaintPerKm = getNumVal('rateMaintPerKm');
+      const rateDeprPerKm = getNumVal('rateDeprPerKm');
+
+      const natGas = Math.round((km / kmPerGasMeter) * priceNatGas);
+      const petrol = Math.round(((km / 100) * petrolLitersPer100Km) * pricePetrol);
+      const maint = Math.round(km * rateMaintPerKm);
+      const depr = Math.round(km * rateDeprPerKm);
+
+      const totalFuel = natGas + petrol;
+      const totalReserve = maint + depr;
+      const totalCarExpenses = totalFuel + totalReserve;
+      const netHome = totalIncome - totalCarExpenses;
+
+      const wallets = {
+        uber: { name: 'أبلكيشن أوبر', icon: '📱', total: uberApp, remaining: uberApp, allocations: [] },
+        vfcash: { name: 'فودافون كاش', icon: '🔴', total: vfCash, remaining: vfCash, allocations: [] },
+        instapay: { name: 'إنستا باي', icon: '⚡', total: instaPay, remaining: instaPay, allocations: [] },
+        cash: { name: 'الكاش', icon: '💵', total: cash, remaining: cash, allocations: [] }
+      };
+
+      function allocate(amountNeeded, label, order) {
+        let stillNeeded = amountNeeded;
+        for (const k of order) {
+          if (stillNeeded <= 0) break;
+          const w = wallets[k];
+          if (w.remaining > 0) {
+            const taken = Math.min(w.remaining, stillNeeded);
+            w.remaining -= taken;
+            stillNeeded -= taken;
+            w.allocations.push({ label, amount: taken });
+          }
+        }
+      }
+
+      // 1. Reserve Maintenance & Depreciation in Uber App -> VF Cash -> InstaPay -> Cash
+      allocate(totalReserve, 'صيانة وإهلاك', ['uber', 'vfcash', 'instapay', 'cash']);
+      // 2. Reserve Fuel in Cash -> VF Cash -> InstaPay -> Uber App
+      allocate(totalFuel, 'غاز وبنزين', ['cash', 'vfcash', 'instapay', 'uber']);
+
+      return {
+        km, priceNatGas, pricePetrol,
+        cash, uberApp, vfCash, instaPay, totalIncome,
+        natGas, petrol, totalFuel, maint, depr, totalReserve,
+        totalCarExpenses, netHome, wallets
+      };
+    }
+
+    function renderAll(skipDirectSync) {
+      persistRates();
+      const s = computeAllocation();
+
+      if (!skipDirectSync) {
+        const directEl = document.getElementById('inputTotalRevenueDirect');
+        if (directEl && document.activeElement !== directEl) {
+          directEl.value = s.totalIncome;
+        }
+      }
+
+      document.getElementById('livePricesBadge').textContent =
+        `غاز ${s.priceNatGas} ج | بنزين ${s.pricePetrol} ج`;
+
+      document.getElementById('pillNatGas').textContent = formatEGP(s.natGas);
+      document.getElementById('pillPetrol').textContent = formatEGP(s.petrol);
+      document.getElementById('pillReserve').textContent = formatEGP(s.totalReserve);
+      document.getElementById('summaryTotalExpenses').textContent = formatEGP(s.totalCarExpenses);
+
+      const netEl = document.getElementById('summaryNetHome');
+      const statusEl = document.getElementById('summaryNetStatus');
+      if (s.netHome >= 0) {
+        netEl.textContent = formatEGP(s.netHome);
+        netEl.className = 'text-4xl font-black text-emerald-400 tracking-tight';
+        statusEl.textContent = `بعد تجنيب ${formatEGP(s.totalCarExpenses)} حق العربية`;
+      } else {
+        netEl.textContent = formatEGP(s.netHome);
+        netEl.className = 'text-4xl font-black text-rose-400 tracking-tight';
+        statusEl.textContent = 'انتبه: مصاريف الكيلومترات أعلى من الإيراد المسجل';
+      }
+
+      // Short, ultra-clean bullet instructions
+      const adviceEl = document.getElementById('smartAdviceContainer');
+      if (s.totalIncome <= 0) {
+        adviceEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">اكتب الكيلومترات وإيراد اليوم فوق عشان تشوف التقسيمة فوراً.</p>`;
+      } else {
+        let html = '';
+        for (const k of ['uber', 'cash', 'vfcash', 'instapay']) {
+          const w = s.wallets[k];
+          if (w.total <= 0) continue;
+          const used = w.total - w.remaining;
+          const usedReason = w.allocations.map(a => a.label).join(' و');
+
+          if (used > 0 && w.remaining === 0) {
+            html += `
+              <div class="bg-slate-950 border border-amber-500/30 rounded-2xl px-3.5 py-2.5 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-200">${w.icon} ${w.name} (${formatEGP(w.total)})</span>
+                <span class="font-black text-amber-300">سيبها كلها (${usedReason})</span>
+              </div>
+            `;
+          } else if (used > 0 && w.remaining > 0) {
+            html += `
+              <div class="bg-slate-950 border border-sky-500/30 rounded-2xl px-3.5 py-2.5 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-200">${w.icon} ${w.name} (${formatEGP(w.total)})</span>
+                <span class="font-bold text-slate-300">
+                  شيل <strong class="text-amber-300">${formatEGP(used)}</strong> (${usedReason}) + خد <strong class="text-emerald-400">${formatEGP(w.remaining)} للبيت</strong>
+                </span>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="bg-slate-950 border border-emerald-500/30 rounded-2xl px-3.5 py-2.5 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-200">${w.icon} ${w.name} (${formatEGP(w.total)})</span>
+                <span class="font-black text-emerald-400">اسحبها كلها صافي للبيت ✓</span>
+              </div>
+            `;
+          }
+        }
+        adviceEl.innerHTML = html;
+      }
+
+      renderHistorySection();
+    }
+
+    function renderHistorySection() {
+      let sumMaint = 0, sumDepr = 0, sumNetHome = 0;
+      for (const item of savedShifts) {
+        sumMaint += Number(item.maint || 0);
+        sumDepr += Number(item.depr || 0);
+        sumNetHome += Number(item.netHome || 0);
+      }
+
+      document.getElementById('savedCountBadge').textContent = savedShifts.length;
+      document.getElementById('cumMaintBalance').textContent = formatEGP(sumMaint);
+      document.getElementById('cumDeprBalance').textContent = formatEGP(sumDepr);
+      document.getElementById('cumNetHomeTotal').textContent = formatEGP(sumNetHome);
+
+      const listEl = document.getElementById('savedHistoryList');
+      if (savedShifts.length === 0) {
+        listEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-2">لا توجد أيام محفوظة بعد.</p>`;
+        return;
+      }
+
+      let html = '';
+      savedShifts.forEach((item, idx) => {
+        html += `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-white">${item.dateStr}</span>
+              <span class="text-slate-400 mx-1">•</span>
+              <span class="text-sky-300">${item.km || 0} كم</span>
+              <span class="text-slate-400 mx-1">•</span>
+              <span class="text-emerald-400 font-bold">صافي ${formatEGP(item.netHome)}</span>
+            </div>
+            <button type="button" data-delete-idx="${idx}" class="btn-delete-shift text-rose-400 font-bold px-2 py-0.5">✕</button>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+
+      document.querySelectorAll('.btn-delete-shift').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-delete-idx'), 10);
+          if (!isNaN(idx)) {
+            savedShifts.splice(idx, 1);
+            persistShifts();
+            renderHistorySection();
+          }
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedShifts();
+      loadSavedRates();
+
+      // Direct Total Revenue Input updates Cash automatically
+      document.getElementById('inputTotalRevenueDirect').addEventListener('input', () => {
+        const desiredTotal = getNumVal('inputTotalRevenueDirect');
+        const others = getNumVal('inputUberApp') + getNumVal('inputVfCash') + getNumVal('inputInstaPay');
+        if (desiredTotal >= others) {
+          document.getElementById('inputCash').value = Math.round(desiredTotal - others);
+        } else {
+          document.getElementById('inputUberApp').value = 0;
+          document.getElementById('inputVfCash').value = 0;
+          document.getElementById('inputInstaPay').value = 0;
+          document.getElementById('inputCash').value = desiredTotal;
+        }
+        renderAll(true);
+      });
+
+      const allInputs = [
+        'autoKmDriven', 'inputCash', 'inputUberApp', 'inputVfCash', 'inputInstaPay',
+        'priceNatGas', 'pricePetrol', 'kmPerGasMeter', 'petrolLitersPer100Km', 'rateMaintPerKm', 'rateDeprPerKm'
+      ];
+      allInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => renderAll(false));
+      });
+
+      // Settings Modal
+      const modal = document.getElementById('settingsModal');
+      document.getElementById('btnOpenSettings').addEventListener('click', () => modal.classList.remove('hidden'));
+      document.getElementById('btnCloseSettings').addEventListener('click', () => modal.classList.add('hidden'));
+      document.getElementById('btnSaveSettings').addEventListener('click', () => {
+        modal.classList.add('hidden');
+        renderAll(false);
+        showToast('تم حفظ الأسعار');
+      });
+
+      // History Drawer Toggle
+      document.getElementById('btnToggleHistory').addEventListener('click', () => {
+        document.getElementById('historyDrawer').classList.toggle('hidden');
+      });
+
+      // Copy Developer Phone Number
+      document.getElementById('btnCopyPhone').addEventListener('click', () => {
+        const phone = '01017714130';
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(phone);
+          } else {
+            const temp = document.createElement('textarea');
+            temp.value = phone;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+          }
+        } catch (e) {}
+        showToast('تم نسخ رقم م. محمد مختار: 01017714130');
+      });
+
+      // Reset
+      document.getElementById('btnResetZero').addEventListener('click', () => {
+        ['inputTotalRevenueDirect', 'inputCash', 'inputUberApp', 'inputVfCash', 'inputInstaPay', 'autoKmDriven'].forEach(id => {
+          document.getElementById(id).value = 0;
+        });
+        renderAll(false);
+        showToast('تم التصفير');
+      });
+
+      // Demo
+      document.getElementById('btnLoadDemo').addEventListener('click', () => {
+        document.getElementById('autoKmDriven').value = 66;
+        document.getElementById('inputTotalRevenueDirect').value = 327;
+        document.getElementById('inputCash').value = 147;
+        document.getElementById('inputUberApp').value = 50;
+        document.getElementById('inputVfCash').value = 80;
+        document.getElementById('inputInstaPay').value = 50;
+        renderAll(false);
+        showToast('تم تحميل مثال اليوم (327 ج / 66 كم)');
+      });
+
+      // Save Day
+      document.getElementById('btnSaveShift').addEventListener('click', () => {
+        const s = computeAllocation();
+        if (s.totalIncome <= 0) {
+          showToast('اكتب إيراد اليوم الأول');
+          return;
+        }
+        const dateStr = new Date().toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
+        savedShifts.unshift({
+          dateStr,
+          km: s.km,
+          totalIncome: s.totalIncome,
+          totalFuel: s.totalFuel,
+          maint: s.maint,
+          depr: s.depr,
+          netHome: s.netHome
+        });
+        persistShifts();
+        renderHistorySection();
+        document.getElementById('historyDrawer').classList.remove('hidden');
+        showToast('تم حفظ اليومية في الحصالة!');
+      });
+
+      // Clear History
+      document.getElementById('btnClearHistory').addEventListener('click', () => {
+        savedShifts = [];
+        persistShifts();
+        renderHistorySection();
+        showToast('تم مسح السجل');
+      });
+
+      renderAll(false);
+    });
+  </script>
+</body>
+</html>

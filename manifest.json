@@ -1,0 +1,11 @@
+{
+  "name": "حاسبة يومية كابتن أوبر",
+  "short_name": "حاسبة أوبر",
+  "description": "حاسبة سريعة لكباتن أوبر والنقل الذكي لحساب صافي البيت وفصل مصاريف الغاز والبنزين والصيانة والإهلاك",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#10b981",
+  "lang": "ar",
+  "dir": "rtl"
+}
